@@ -1,14 +1,16 @@
 from flask import Flask
+from routes import register_routes
+from config.config import Config
+from utils.logger import setup_logging
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
+    register_routes(app)
+    setup_logging(app)
+    return app
 
-@app.route("/")
-def home():
-    return "Hello from the dev branch!"
-
-@app.route("/health")
-def health():
-    return "OK", 200
+app = create_app()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=app.config["DEBUG"])
