@@ -1,0 +1,29 @@
+Ticker,Sector,Theme,Tier
+MSFT,Technology,AI,Tier 1
+NVDA,Technology,AI,Tier 1
+PLTR,Technology,AI,Tier 1
+SNOW,Technology,Cloud,Tier 1
+AMD,Technology,Semiconductor,Tier 1
+AVGO,Technology,Semiconductor,Tier 1
+CRWD,Technology,Cybersecurity,Tier 1
+GOOG,Technology,AI,Tier 1
+META,Technology,AI,Tier 1
+TSLA,Technology,AI,Tier 1
+IONQ,Technology,Quantum,Tier 1
+QSI,Technology,Quantum,Tier 1
+QUBT,Technology,Quantum,Tier 2
+QBTS,Technology,Quantum,Tier 2
+RGTI,Technology,Quantum,Tier 2
+NEE,Energy,Smart Grid,Tier 1
+AES,Energy,Smart Grid,Tier 1
+DUK,Energy,Power Utility,Tier 2
+FLNC,Energy,Battery,Tier 1
+STEM,Energy,Battery,Tier 2
+FSLR,Energy,Renewables,Tier 1
+NOVA,Energy,Solar,Tier 2
+RXRX,Healthcare,Drug Discovery,Tier 1
+SDGR,Healthcare,Drug Discovery,Tier 2
+EXAI,Healthcare,Diagnostics,Tier 1
+GH,Healthcare,Diagnostics,Tier 2
+IQV,Healthcare,Clinical Trials,Tier 1
+VEEV,Healthcare,Clinical Trials,Tier 2

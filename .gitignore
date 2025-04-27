@@ -1,10 +1,46 @@
+# ======================
+# Python
+# ======================
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 *.log
+
+# ======================
+# Flask / Project
+# ======================
 .env
-*.swp
-*.bak
-*.pid
-.idea/
-.vscode/
+instance/
+logs/
 *.sqlite3
+*.db
+
+# ======================
+# VS Code
+# ======================
+.vscode/
+
+# ======================
+# Git
+# ======================
+*.swp
+.DS_Store
+
+# ======================
+# Google Drive / Cloud Synced Files
+# ======================
+*.gsheet
+*.gdoc
+*.gsheet/
+*.gdoc/
+AI Market Analysis and Investment/
+Jason FIles/
+SSTI Autoation files/
+ChatGPT PRO.gdoc
+External Document.gdoc
+
+# ======================
+# Sensitive Files
+# ======================
+vol_google_credentials.json
