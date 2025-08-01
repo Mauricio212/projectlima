@@ -1,0 +1,49 @@
+# Logs and temporary files
+*.log
+*.pid
+nohup.out
+*.tmp
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Python cache and environments
+__pycache__/
+*.pyc
+*.pyo
+lima_env/
+venv/
+
+# Backup files
+*.backup
+*.bak
+*.save
+
+# Credentials and secrets
+creds.json
+secrets/
+
+# Build and distribution
+dist/
+build/
+*.egg-info/
+
+# IDE and editor files
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Project specific
+logs/
+logs_backup/
+grid_hold_output/
+results/
+data/
+*.html
