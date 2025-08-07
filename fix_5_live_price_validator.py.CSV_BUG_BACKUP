@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+import csv
+import requests
+import time
+import json
+from datetime import datetime
+
+config_path = "/home/ec2-user/project_lima/grid_hold_output/grid_config.csv"
+log_path = "/home/ec2-user/project_lima/logs/fix_5_validation_log.csv"
+signature_path = "/home/ec2-user/project_lima/grid_hold_output/fix_5_validation_signature.json"
+api_url = "https://api.coingecko.com/api/v3/simple/price"
+
+# Load config rows
+tokens = []
+with open(config_path, newline='') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        tokens.append(row)
+
+validated = []
+failed = []
+
+def fetch_price(symbol):
+    response = requests.get(api_url, params={
+        'ids': symbol.lower(),
+        'vs_currencies': 'usd'
+    })
+    if response.status_code == 200:
+        return response.json().get(symbol.lower(), {}).get('usd')
+    return None
+
+for token in tokens:
+    symbol = token["symbol"]
+    try:
+        price = fetch_price(symbol)
+        time.sleep(1.2)  # CoinGecko rate limit
+        if not price:
+            raise ValueError("No price fetched")
+
+        low = float(token["price_min"])
+        high = float(token["price_max"])
+        step = float(token["step_pct"])
+
+        in_range = low <= price <= high
+        step_ok = step >= 1.5
+
+        token["live_price_usd"] = round(price, 4)
+        token["price_in_range"] = "✅" if in_range else "❌"
+        token["step_pct_ok"] = "✅" if step_ok else "❌"
+
+        if in_range and step_ok:
+            validated.append(token)
+        else:
+            failed.append(token)
+
+    except Exception as e:
+        token["error"] = str(e)
+        failed.append(token)
+
+# Write validation log
+with open(log_path, "w", newline='') as f:
+    fieldnames = list(tokens[0].keys())
+    writer = csv.DictWriter(f, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(tokens)
+
+# Write FIX-5 signature
+signature = {
+    "timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+    "validated_by": "FIX-5",
+    "passed": len(failed) == 0,
+    "total_checked": len(tokens),
+    "tokens_failed": [t["symbol"] for t in failed],
+    "signed_by": "GPT-4 Orchestrator"
+}
+with open(signature_path, "w") as f:
+    json.dump(signature, f, indent=2)
+
+print("✅ FIX-5 complete.")
+print(f"Passed: {len(validated)} / {len(tokens)}")
+print(f"Validation log saved to: {log_path}")
+print(f"Signature saved to: {signature_path}")

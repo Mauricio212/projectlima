@@ -1,0 +1,5 @@
+Resume Project Lima. Use config: project_lima_config.json
+Load document: Grid Hold Logic Map
+AWS, ports, files, and tools are fixed — do NOT re-ask.
+ETHUSDC and LINKUSDC bots active.
+

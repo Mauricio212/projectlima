@@ -1,0 +1,2 @@
+logrotate state -- version 2
+"/home/ec2-user/project_lima/doc_warehouse/registry/export_to_sheets.log" 2025-7-28-15:0:0

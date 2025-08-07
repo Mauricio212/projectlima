@@ -1,0 +1,377 @@
+/* Project Lima - RAFA.AI Inspired Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0b0d;
+    color: #ffffff;
+    overflow-x: hidden;
+}
+
+/* Top Ticker */
+.top-ticker {
+    background: #111216;
+    border-bottom: 1px solid #1a1d24;
+    padding: 8px 0;
+    overflow: hidden;
+}
+
+.ticker-container {
+    display: flex;
+    animation: scroll 30s linear infinite;
+    white-space: nowrap;
+}
+
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 40px;
+    font-size: 14px;
+    color: #8892b0;
+}
+
+.ticker-symbol {
+    color: #64ffda;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.ticker-price {
+    margin-right: 8px;
+}
+
+.ticker-change {
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.ticker-change.positive {
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.ticker-change.negative {
+    color: #ff4757;
+    background: rgba(255, 71, 87, 0.1);
+}
+
+@keyframes scroll {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* App Layout */
+.app-container {
+    display: flex;
+    height: calc(100vh - 60px);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 240px;
+    background: #111216;
+    border-right: 1px solid #1a1d24;
+    padding: 20px 0;
+}
+
+.logo {
+    padding: 0 20px 30px;
+    border-bottom: 1px solid #1a1d24;
+    margin-bottom: 20px;
+}
+
+.logo h2 {
+    color: #64ffda;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.logo span {
+    color: #8892b0;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nav-menu {
+    list-style: none;
+}
+
+.nav-item {
+    margin-bottom: 5px;
+}
+
+.nav-item a {
+    display: block;
+    padding: 12px 20px;
+    color: #8892b0;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.nav-item:hover a,
+.nav-item.active a {
+    color: #64ffda;
+    background: rgba(100, 255, 218, 0.05);
+    border-left-color: #64ffda;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    background: #0a0b0d;
+}
+
+.content-header {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #1a1d24;
+}
+
+.content-header h1 {
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #64ffda, #00bfa5);
+    color: #0a0b0d;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
+}
+
+.last-update {
+    color: #8892b0;
+    font-size: 14px;
+}
+
+/* Intelligence Grid */
+.intelligence-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.intel-card {
+    background: #111216;
+    border: 1px solid #1a1d24;
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.intel-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #64ffda, #00bfa5);
+}
+
+.intel-card:hover {
+    transform: translateY(-5px);
+    border-color: #64ffda;
+    box-shadow: 0 15px 35px rgba(100, 255, 218, 0.1);
+}
+
+.card-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+}
+
+.card-content h3 {
+    color: #ffffff;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.card-content p {
+    color: #8892b0;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.metric {
+    margin-bottom: 20px;
+}
+
+.metric-value {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    color: #64ffda;
+    margin-bottom: 4px;
+}
+
+.metric-label {
+    color: #8892b0;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-action {
+    background: rgba(100, 255, 218, 0.1);
+    border: 1px solid #64ffda;
+    color: #64ffda;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.card-action:hover {
+    background: #64ffda;
+    color: #0a0b0d;
+}
+
+/* Market Overview */
+.market-overview {
+    margin-bottom: 40px;
+}
+
+.market-overview h2 {
+    color: #ffffff;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.market-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stat-item {
+    background: #111216;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #1a1d24;
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    color: #8892b0;
+    font-size: 12px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.stat-value.positive {
+    color: #00ff88;
+}
+
+.stat-value.negative {
+    color: #ff4757;
+}
+
+/* Top Performers */
+.top-performers h2 {
+    color: #ffffff;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.performers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.performer-card {
+    background: #111216;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #1a1d24;
+}
+
+.performer-card h4 {
+    color: #8892b0;
+    font-size: 14px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.performer-item {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+}
+
+.performer-item .symbol {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.performer-item .change {
+    font-weight: 600;
+}
+
+.performer-card.gain .change {
+    color: #00ff88;
+}
+
+.performer-card.loss .change {
+    color: #ff4757;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        height: auto;
+    }
+    
+    .intelligence-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .market-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

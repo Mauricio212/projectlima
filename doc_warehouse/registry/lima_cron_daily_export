@@ -1,0 +1,1 @@
+0 6 * * * /usr/bin/python3 /home/ec2-user/project_lima/doc_warehouse/registry/export_to_google_sheets.py >> /home/ec2-user/project_lima/doc_warehouse/registry/export_to_sheets.log 2>&1

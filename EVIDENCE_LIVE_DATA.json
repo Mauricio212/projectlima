@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Bitcoin",
+    "symbol": "BTC",
+    "id": "bitcoin",
+    "market_cap": 2343806538589,
+    "volume": 46359379886,
+    "price": 117829
+  },
+  {
+    "name": "Ethereum",
+    "symbol": "ETH",
+    "id": "ethereum",
+    "market_cap": 432726245118,
+    "volume": 44214815587,
+    "price": 3584.22
+  },
+  {
+    "name": "Solana",
+    "symbol": "SOL",
+    "id": "solana",
+    "market_cap": 102338961690,
+    "volume": 21821226357,
+    "price": 189.72
+  },
+  {
+    "name": "Dogecoin",
+    "symbol": "DOGE",
+    "id": "dogecoin",
+    "market_cap": 36867924385,
+    "volume": 11468351742,
+    "price": 0.243673
+  },
+  {
+    "name": "Cardano",
+    "symbol": "ADA",
+    "id": "cardano",
+    "market_cap": 29553604448,
+    "volume": 1565674313,
+    "price": 0.817126
+  },
+  {
+    "name": "Chainlink",
+    "symbol": "LINK",
+    "id": "chainlink",
+    "market_cap": 12244378339,
+    "volume": 849465245,
+    "price": 18.05
+  },
+  {
+    "name": "Avalanche",
+    "symbol": "AVAX",
+    "id": "avalanche-2",
+    "market_cap": 10085005531,
+    "volume": 1097610841,
+    "price": 23.84
+  },
+  {
+    "name": "Litecoin",
+    "symbol": "LTC",
+    "id": "litecoin",
+    "market_cap": 8624458023,
+    "volume": 1465792510,
+    "price": 113.26
+  },
+  {
+    "name": "Polkadot",
+    "symbol": "DOT",
+    "id": "polkadot",
+    "market_cap": 6347641861,
+    "volume": 565921830,
+    "price": 4.17
+  }
+]

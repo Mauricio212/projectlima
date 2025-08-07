@@ -1,0 +1,5 @@
+📊 Project Lima Document Dashboard
+========================================
+
+1. test_document.txt — test — None — Sample doc for intake test
+2. taggable_doc.txt — test — finance;technical — Document with taggable keywords

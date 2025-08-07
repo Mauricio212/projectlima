@@ -1,0 +1,33 @@
+# fix_2_token_roi_generator.py
+
+import pandas as pd
+from pathlib import Path
+from datetime import datetime
+
+# Load most recent FIX-1 output CSV
+input_path = max(Path("/home/ec2-user/project_lima/grid_hold_output").glob("step_3_1_tokens_*.csv"))
+output_path = Path("/home/ec2-user/project_lima/grid_hold_output/step_3_2_token_roi.csv")
+log_path = Path("/home/ec2-user/project_lima/logs/fix_2_token_roi_log.csv")
+
+# Load FIX-1 output
+df = pd.read_csv(input_path)
+
+# Verify required columns exist
+required_cols = {"symbol", "grid_roi", "hold_roi"}
+if not required_cols.issubset(set(df.columns)):
+    raise ValueError(f"Missing required columns in FIX-1 output: {required_cols - set(df.columns)}")
+
+# Extract ROI fields
+roi_df = df[["symbol", "grid_roi", "hold_roi"]].copy()
+roi_df.to_csv(output_path, index=False)
+
+# Log the result
+log_path.parent.mkdir(parents=True, exist_ok=True)
+timestamp = datetime.utcnow().isoformat()
+log_entry = f"{timestamp},{input_path.name},{output_path.name},{len(roi_df)} tokens\n"
+with log_path.open("a") as log:
+    log.write(log_entry)
+
+# Confirmation
+print(f"[✅ FIX-2] ROI table generated: {output_path}")
+print(f"[📝 LOGGED] {log_path}")

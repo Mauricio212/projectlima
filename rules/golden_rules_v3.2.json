@@ -1,0 +1,13 @@
+{
+  "ruleset_version": "v3.2",
+  "sections": {
+    "A": "Capital Filters",
+    "B": "Strategic Logic",
+    "C": "Governance and Control",
+    "D": "Domain-Specific Trading Logic"
+  },
+  "enforcement_model": "graduated",
+  "precedence_order": ["C", "B", "D", "A"],
+  "hash_verified": false,
+  "last_updated": "2025-07-28"
+}

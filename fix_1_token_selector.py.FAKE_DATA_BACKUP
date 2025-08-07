@@ -1,0 +1,50 @@
+# fix_1_token_selector.py
+
+import json
+import csv
+from datetime import datetime
+from pathlib import Path
+
+# Step 1: Define output paths
+timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+output_dir = Path("/home/ec2-user/project_lima/grid_hold_output")
+output_dir.mkdir(parents=True, exist_ok=True)
+json_path = output_dir / f"step_3_1_tokens_{timestamp}.json"
+csv_path = output_dir / f"step_3_1_tokens_{timestamp}.csv"
+
+# Step 2: Simulated token list for demo (would normally come from API)
+tokens = [
+    {"symbol": "BTC", "rank": 1, "exchange": "Coinbase", "is_stable": False, "grid_roi": 14.2, "hold_roi": 6.5},
+    {"symbol": "ETH", "rank": 2, "exchange": "Coinbase", "is_stable": False, "grid_roi": 12.8, "hold_roi": 7.1},
+    {"symbol": "USDC", "rank": 5, "exchange": "Coinbase", "is_stable": True, "grid_roi": 0.0, "hold_roi": 0.0},
+    {"symbol": "ADA", "rank": 10, "exchange": "Coinbase", "is_stable": False, "grid_roi": 9.1, "hold_roi": 9.0},
+    {"symbol": "HOLD", "rank": 0, "exchange": "Coinbase", "is_stable": False, "grid_roi": 0.0, "hold_roi": 5.2},
+    {"symbol": "DOGE", "rank": 9, "exchange": "Coinbase", "is_stable": False, "grid_roi": 5.0, "hold_roi": 5.4},
+    {"symbol": "SHIBA", "rank": 31, "exchange": "Coinbase", "is_stable": False, "grid_roi": 4.0, "hold_roi": 4.1},
+]
+
+# Step 3: Apply filters
+filtered_tokens = []
+for token in tokens:
+    if token["is_stable"]:
+        continue
+    if token["rank"] > 30 and token["symbol"] != "HOLD":
+        continue
+    if token["exchange"] != "Coinbase":
+        continue
+    filtered_tokens.append(token)
+
+# Step 4: Write JSON output
+with json_path.open("w") as f:
+    json.dump(filtered_tokens, f, indent=2)
+
+# Step 5: Write CSV output
+with csv_path.open("w", newline="") as f:
+    writer = csv.DictWriter(f, fieldnames=filtered_tokens[0].keys())
+    writer.writeheader()
+    writer.writerows(filtered_tokens)
+
+# Step 6: Confirmation
+print(f"[✅ FIX-1] Token selection complete.")
+print(f"[📄 JSON] {json_path}")
+print(f"[📄 CSV]  {csv_path}")

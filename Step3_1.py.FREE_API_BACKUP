@@ -1,0 +1,102 @@
+# Step3_1.py — Project Lima Phase 3.1
+# ✅ Final Version using httpx (no short-term patch, DNS-resilient)
+
+import httpx
+import pandas as pd
+import json
+import os
+from datetime import datetime
+
+# === CONFIGURATION ===
+MARKET_CAP_LIMIT = 30
+MIN_VOLUME_USD = 10_000_000
+EXCLUDED_TOKENS = {
+    'USDT', 'USDC', 'DAI', 'TUSD', 'BUSD', 'WBTC', 'WETH',
+    'sETH', 'sBTC', 'stETH', 'LUSD', 'FRAX'
+}
+COINBASE_USDC_PAIRS = {
+    'BTC', 'ETH', 'SOL', 'ADA', 'AVAX', 'MATIC', 'LINK', 'DOT',
+    'DOGE', 'LTC', 'ARB', 'OP', 'ATOM', 'NEAR', 'AAVE', 'SAND', 'AXS', 'GRT'
+}
+
+# === API FUNCTION (httpx DNS-resilient) ===
+def get_top_30_tokens():
+    url = "https://api.coingecko.com/api/v3/coins/markets"
+    params = {
+        "vs_currency": "usd",
+        "order": "market_cap_desc",
+        "per_page": 50,
+        "page": 1,
+        "sparkline": False
+    }
+    try:
+        with httpx.Client(timeout=10.0) as client:
+            response = client.get(url, params=params)
+            response.raise_for_status()
+            data = response.json()
+    except httpx.RequestError as e:
+        print(f"[ERROR] Failed to connect to CoinGecko: {e}")
+        return []
+
+    top_tokens = []
+    for item in data:
+        symbol = item['symbol'].upper()
+        if symbol in EXCLUDED_TOKENS:
+            continue
+        top_tokens.append({
+            "name": item['name'],
+            "symbol": symbol,
+            "id": item['id'],
+            "market_cap": item['market_cap'],
+            "volume": item['total_volume'],
+            "price": item['current_price']
+        })
+        if len(top_tokens) >= MARKET_CAP_LIMIT:
+            break
+    return top_tokens
+
+# === FILTERING FUNCTION ===
+def filter_tokens(tokens):
+    return [
+        t for t in tokens
+        if t['symbol'] in COINBASE_USDC_PAIRS and t['volume'] >= MIN_VOLUME_USD
+    ]
+
+# === EXPORT FUNCTION ===
+def export_results(filtered_tokens):
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    output_dir = "/home/ec2-user/project_lima/grid_hold_output"
+    os.makedirs(output_dir, exist_ok=True)
+
+    json_path = os.path.join(output_dir, f"step_3_1_tokens_{timestamp}.json")
+    csv_path = os.path.join(output_dir, f"step_3_1_tokens_{timestamp}.csv")
+
+    with open(json_path, "w") as f:
+        json.dump(filtered_tokens, f, indent=2)
+
+    df = pd.DataFrame(filtered_tokens)
+    df.to_csv(csv_path, index=False)
+    return df
+
+# === MAIN EXECUTION ===
+if __name__ == "__main__":
+    print("[INFO] Fetching top 30 tokens from CoinGecko...")
+    tokens = get_top_30_tokens()
+
+    if not tokens:
+        print("[ERROR] Could not fetch token list.")
+        exit(1)
+
+    print(f"[INFO] Retrieved {len(tokens)} tokens. Filtering...")
+    filtered = filter_tokens(tokens)
+
+    print(f"[INFO] {len(filtered)} tokens matched filters. Exporting...")
+    df = export_results(filtered)
+
+    # Optional: display as table (if integrated into notebook or script layer)
+    try:
+        import ace_tools as tools
+        tools.display_dataframe_to_user(name="Filtered Top 30 Tokens with USDC Pairs", dataframe=df)
+    except ImportError:
+        print("[INFO] Export complete. DataFrame preview:")
+        print(df.head())

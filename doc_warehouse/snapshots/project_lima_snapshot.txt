@@ -1,0 +1,26 @@
+📦 PROJECT LIMA SNAPSHOT
+Version: Certified Rebase 2025-07-27
+Status: ✅ Certif
+
+ied
+Location: /home/ec2-user/project_lima/doc_warehouse/certified
+
+✅ Included Modules:
+- fix_schema.py
+- lima_backend.py
+- verify_dual_site_safety.py
+- start_lima.sh
+- lima_platform.db
+
+✅ Supporting Folders:
+- results/
+- scripts/
+- utils/
+
+🚫 Excluded:
+- Virtual environments
+- Site-packages, pip caches
+- __pycache__
+- Temporary or .save/.backup files
+
+🧠 AI agents (Claude, ChatGPT) must start from this snapshot. Do not regenerate anything unless re-certified.

@@ -1,0 +1,8 @@
+0 6 * * * /usr/bin/python3 /home/ec2-user/project_lima/run_project_lima_pipeline.py >> /home/ec2-user/project_lima/logs/daily_pipeline.log 2>&1
+0 2 * * 1 /usr/bin/python3 /home/ec2-user/project_lima/rotate_lima_logs.py >> /home/ec2-user/project_lima/logs/log_rotation.log 2>&1
+5 6 * * * /usr/bin/python3 /home/ec2-user/project_lima/log_grid_hold_decision_to_sheets.py >> /home/ec2-user/project_lima/logs/sheets_export.log 2>&1
+10 6 * * 1 /usr/bin/python3 /home/ec2-user/project_lima/scripts/validate_pipeline_health.py >> /home/ec2-user/project_lima/logs/pipeline_health_cron.log 2>&1
+*/15 * * * * /usr/bin/python3 /home/ec2-user/project_lima/scripts/cron_heartbeat_logger.py >> /home/ec2-user/project_lima/logs/cron_heartbeat.log 2>&1
+4 5 * * * /usr/bin/python3 /home/ec2-user/project_lima/scripts/selfaware_structure_check.py >> /home/ec2-user/project_lima/system/selfaware.log 2>&1
+15 6 * * 1 /usr/bin/python3 /home/ec2-user/project_lima/scripts/system_snapshot_and_certify.py >> /home/ec2-user/project_lima/logs/system_certification.log 2>&1
+20 6 * * * /usr/bin/python3 /home/ec2-user/project_lima/scripts/export_lima_cert_logs_to_sheets.py >> /home/ec2-user/project_lima/logs/sheets_cert_export.log 2>&1

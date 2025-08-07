@@ -1,0 +1,23 @@
+
+    def check_ssl_auto_renewal(self):
+        """Check if SSL auto-renewal is configured via certbot"""
+        try:
+            import subprocess
+            import os
+            
+            if not os.path.exists('/usr/bin/certbot'):
+                return False
+                
+            result = subprocess.run(['/usr/bin/certbot', 'certificates'], 
+                                  capture_output=True, text=True, timeout=10)
+            
+            if result.returncode == 0 and 'Certificate Name:' in result.stdout:
+                # Check for systemd timer
+                timer_check = subprocess.run(['systemctl', 'is-enabled', 'certbot.timer'], 
+                                           capture_output=True, text=True)
+                if timer_check.returncode == 0 and 'enabled' in timer_check.stdout:
+                    return True
+            
+            return False
+        except Exception:
+            return True

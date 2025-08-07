@@ -1,0 +1,8 @@
+# 📆 Run Project Lima Pipeline daily at 9:00 AM
+0 9 * * * source /home/ec2-user/project_lima/lima_env/bin/activate && python3 /home/ec2-user/project_lima/run_project_lima_pipeline.py >> /home/ec2-user/project_lima/logs/daily_pipeline.log 2>&1
+
+# 🔁 Weekly FIX Certification Test (Mondays @ 10:00 AM)
+0 10 * * 1 source /home/ec2-user/project_lima/lima_env/bin/activate && python3 /home/ec2-user/project_lima/fix_gr_008_watchdog.py >> /home/ec2-user/project_lima/logs/fix_gr_008_watchdog.log 2>&1
+
+# 🌀 Rotate logs every Sunday at midnight
+0 0 * * 0 /usr/sbin/logrotate /home/ec2-user/project_lima/cron_jobs/project_lima_logrotate.conf >> /home/ec2-user/project_lima/logs/logrotate.log 2>&1

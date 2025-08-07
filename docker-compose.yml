@@ -1,0 +1,23 @@
+services:
+  # Flask Application Container
+  lima-app:
+    build: 
+      context: docker/app
+      dockerfile: Dockerfile
+    container_name: lima-flask-app
+    ports:
+      - "8081:8081"  # Map container port 8081 to host port 8081
+    environment:
+      - FLASK_ENV=production
+      - PYTHONPATH=/app
+      # Connect to host PostgreSQL using host.docker.internal
+      - DATABASE_HOST=host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs:rw
+
+volumes:
+  app-logs:
+    driver: local

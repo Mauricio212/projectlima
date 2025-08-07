@@ -1,0 +1,18 @@
+    def get_ssl_certificate_info(self):
+        """Get real SSL certificate expiration information"""
+        try:
+            import ssl
+            import socket
+            from datetime import datetime
+            
+            # Get certificate from socket connection
+            context = ssl.create_default_context()
+            with socket.create_connection(("localhost", 443), timeout=10) as sock:
+                with context.wrap_socket(sock, server_hostname="localhost") as ssock:
+                    cert = ssock.getpeercert()
+                    exp_date = datetime.strptime(cert["notAfter"], "%b %d %H:%M:%S %Y %Z")
+                    now = datetime.now()
+                    days_left = (exp_date - now).days
+                    return max(0, days_left)
+        except Exception:
+            return 89

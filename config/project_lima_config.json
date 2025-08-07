@@ -1,0 +1,42 @@
+{
+  "project_name": "Project Lima",
+  "version": "2.3.1",
+  "mac_usage_policy": {
+    "allowed": [
+      "One-time Google OAuth browser flow for rclone",
+      "One-time GitHub SSH key generation and transfer",
+      "Secure PEM storage for EC2 access",
+      "Temporary local testing or credential generation with explicit export to EC2"
+    ],
+    "prohibited": [
+      "Ongoing use of Mac for sync, version control, automation, or scripts",
+      "Running any Project Lima logic from Mac post-deployment",
+      "GitHub commits from Mac",
+      "OAuth token refresh or Drive interaction from Mac after Phase 0",
+      "Storing critical configs on Mac as primary location"
+    ],
+    "enforcement": "All Lima components must be deployed, triggered, and executed exclusively within the EC2 environment. Mac use is limited to transition-only tasks with no persistent architectural dependency."
+  },
+  "drive_protection_policy": {
+    "destination_path": "gdrive:/Project_Lima_Backup/",
+    "read_access_outside_path": false,
+    "write_access_outside_path": false,
+    "delete_operations_allowed": false,
+    "enforcement": "All Google Drive operations must remain strictly within gdrive:/Project_Lima_Backup/. No read, write, delete, or sync commands may target any other folder or file on the Drive account. Violations must terminate immediately and log as execution breach."
+  },
+  "physical_validation_policy": {
+    "live_data_required": true,
+    "simulate_logic_allowed": false,
+    "mock_output_allowed": false,
+    "enforcement": "Every test, check, or verification must operate in real-world conditions using physical validation: file presence, process exit codes, disk output, log inspection, or live system response. No logic-only checks allowed. No echo-based mocks. No 'assume pass' statements."
+  },
+  "live_financial_data_policy": {
+    "live_required": true,
+    "simulate_allowed": false,
+    "use_hardcoded_values": false,
+    "source_verification_required": true,
+    "fallback_to_memory": false,
+    "enforcement": "All financial operations (including crypto, stocks, ETF, options, and strategy logic) must use verified live data sources. No simulated prices, historical placeholders, or hardcoded inputs are allowed. Data must be fetched live at runtime from approved APIs or exchanges. Failure to enforce this invalidates any result."
+  },
+  "policy_timestamp": "2025-08-07T14:55:00-04:00"
+}

@@ -1,0 +1,118 @@
+==> web_app_professional_secured.py <==
+from flask import Flask, request, render_template_string, jsonify, session, redirect, url_for
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+import sqlite3
+import hashlib
+import secrets
+import psutil
+import os
+from datetime import datetime
+
+app = Flask(__name__)
+app.secret_key = secrets.token_hex(32)  # Secure secret key
+
+# Initialize rate limiter
+limiter = Limiter(
+    app=app,
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
+)
+
+# Security headers middleware
+@app.after_request
+def add_security_headers(response):
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    response.headers['Content-Security-Policy'] = "default-src 'self'; style-src 'self' 'unsafe-inline'"
+    return response
+
+# Database connection with security
+def get_db_connection():
+    conn = sqlite3.connect('lima_trading.db', timeout=10)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# System monitoring endpoint
+@app.route('/api/system/status')
+@limiter.limit("10 per minute")
+def system_status():
+    try:
+        memory = psutil.virtual_memory()
+        disk = psutil.disk_usage('.')
+        cpu = psutil.cpu_percent(interval=0.1)
+        
+        return jsonify({
+            "status": "operational",
+            "memory_used_percent": memory.percent,
+            "disk_used_percent": disk.percent,
+            "cpu_percent": cpu,
+            "timestamp": datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+# Fixed login endpoint with proper methods
+@app.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
+def login():
+    if request.method == 'POST':
+        try:
+            data = request.get_json() or {}
+            email = data.get('email', '').strip().lower()
+            password = data.get('password', '')
+            
+            if not email or not password:
+                return jsonify({"status": "error", "message": "Email and password required"}), 400
+            
+            conn = get_db_connection()
+            user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
+            conn.close()
+            
+            if user and hashlib.sha256(password.encode()).hexdigest() == user['password_hash']:
+                session['user_id'] = user['user_id']
+                session['email'] = user['email']
+                return jsonify({"status": "success", "redirect": "/dashboard"})
+            else:
+                return jsonify({"status": "error", "message": "Invalid credentials"}), 401
+                
+        except Exception as e:
+            return jsonify({"status": "error", "message": "Login failed"}), 500
+    
+    # Return login page for GET requests
+    return render_template_string(open('web_app_professional.py').read().split('<!DOCTYPE html>')[1].split('</body>')[0] + '</body>')
+
+# Add missing API endpoints
+@app.route('/api/v1/recommendations', methods=['GET'])
+@limiter.limit("10 per minute")
+def api_recommendations():
+    try:
+        # Get latest pipeline results
+        import pandas as pd
+        df = pd.read_csv('grid_hold_output/step_3_3_selected_tokens.csv')
+        recommendations = df.to_dict('records')
+        
+        return jsonify({
+            "status": "success",
+            "data": recommendations,
+            "timestamp": datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": "Unable to fetch recommendations"}), 500
+
+@app.route('/api/recommendations', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")  
+def api_recommendations_alt():
+    return api_recommendations()
+
+# Main route
+@app.route('/')
+def index():
+    return open('web_app_professional.py').read().split('<!DOCTYPE html>')[1].split('</html>')[0] + '</html>'
+
+if __name__ == '__main__':
+    print("🚀 Project Lima - Secured Professional Trading Platform")
+    print("✅ Security headers enabled")

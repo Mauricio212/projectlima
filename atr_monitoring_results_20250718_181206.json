@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-07-18T18:12:07.574702",
+  "session_id": "20250718_181206",
+  "criteria": {
+    "atr_threshold": 7.0,
+    "atr_period_days": 10
+  },
+  "summary": {
+    "total_analyzed": 0,
+    "total_qualified": 0,
+    "qualification_rate": 0
+  },
+  "all_analyses": [],
+  "qualifying_tokens": []
+}
