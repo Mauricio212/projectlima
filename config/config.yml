@@ -1,0 +1,7 @@
+# config/config.yml
+# Project Lima - Public Config
+
+ec2_public_ip: "3.92.182.44"
+server_user: "ec2-user"
+ssh_key_path: "/g/My Drive/1-Mauricio/AI Resources and Apps/Lima_Project/flask-key.pem"
+deployment_bucket: "lima-deployments"
