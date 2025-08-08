@@ -1,0 +1,13 @@
+{
+  "last_update_utc": "2025-08-08T01:37:01Z",
+  "source": "aws_ec2_security_groups",
+  "region": "us-east-1",
+  "instance": {
+    "name": "Lima-Rebuild",
+    "public_ip": "52.200.101.103"
+  },
+  "allowed": {
+    "tcp": [ 22, 80, 443, 3000, 5001, 5002, 5003, 5004, 5005, 5006, 8000, 8001, 8080, 8085 ],
+    "udp": []
+  }
+}

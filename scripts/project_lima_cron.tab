@@ -1,0 +1,1 @@
+0 4 * * * bash ~/project_lima/scripts/daily_lima_job.sh
