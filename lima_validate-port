@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# lima_validate-port — verify that inbound TCP/<PORT> is allowed in this instance's Security Group(s)
+# Exit 0 if allowed, exit 1 if blocked or undetermined.
+set -euo pipefail
+
+PORT="${1:-}"
+if [[ -z "$PORT" || ! "$PORT" =~ ^[0-9]+$ ]]; then
+  echo "[LIMA] Usage: $0 <port>"; exit 1
+fi
+
+# Get region & instance id via IMDSv2
+TOKEN="$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 60" || true)"
+HDR=()
+[[ -n "$TOKEN" ]] && HDR=(-H "X-aws-ec2-metadata-token: $TOKEN")
+
+INSTANCE_ID="$(curl -s "${HDR[@]}" http://169.254.169.254/latest/meta-data/instance-id || true)"
+REGION="$(curl -s "${HDR[@]}" http://169.254.169.254/latest/dynamic/instance-identity/document | grep -oE '"region" *: *"[^"]+"' | cut -d\" -f4 || true)"
+
+if [[ -z "${INSTANCE_ID:-}" || -z "${REGION:-}" ]]; then
+  echo "[LIMA] Could not resolve InstanceId/Region from IMDS."; exit 1
+fi
+
+# Require aws CLI
+if ! command -v aws >/dev/null 2>&1; then
+  echo "[LIMA] aws CLI not installed."; exit 1
+fi
+
+# Collect SG IDs attached to this instance
+readarray -t SG_IDS < <(aws ec2 describe-instances \
+  --instance-ids "$INSTANCE_ID" \
+  --region "$REGION" \
+  --query "Reservations[].Instances[].SecurityGroups[].GroupId" \
+  --output text | tr '\t' '\n' | sed '/^$/d')
+
+if [[ ${#SG_IDS[@]} -eq 0 ]]; then
+  echo "[LIMA] No Security Groups found for $INSTANCE_ID."; exit 1
+fi
+
+# Check each SG for a tcp rule that covers PORT (any CIDR is accepted)
+for SG in "${SG_IDS[@]}"; do
+  COUNT="$(aws ec2 describe-security-groups \
+    --group-ids "$SG" \
+    --region "$REGION" \
+    --query "length(SecurityGroups[0].IpPermissions[?IpProtocol=='tcp' && FromPort<=\`$PORT\` && ToPort>=\`$PORT\`])" \
+    --output text 2>/dev/null || echo 0)"
+  if [[ "$COUNT" =~ ^[0-9]+$ ]] && (( COUNT > 0 )); then
+    echo "[LIMA] OK: SG $SG allows inbound tcp/$PORT."
+    exit 0
+  fi
+done
+
+echo "[LIMA] BLOCKED: No inbound tcp/$PORT rule found on attached Security Group(s): ${SG_IDS[*]}"
+exit 1
